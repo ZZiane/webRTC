@@ -3,14 +3,13 @@ import io from 'socket.io-client';
 import usePeerConnection from './usePeerConnection';
 
 
-
-const useCallSimplify = ({ userName }) => {
+const useCallSimplify = ({ userName, isScreenShare, withAudio }) => {
     const [socket, setSocket] = useState(null);
     const { answer, call, offers, localStream, remoteStream } = usePeerConnection(socket, {
         iceServers: [
             { urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] },
         ],
-    }, userName);
+    }, { userName, screenShare: isScreenShare, withAudio });
 
 
     useEffect(() => {

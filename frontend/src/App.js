@@ -4,12 +4,16 @@ import MainSection from './components/MainSection';
 import useCallSimplify from './hooks/useCallSimplify';
 
 const App = () => {
-  const [userName, setUserName] = useState(`Guest-${Math.ceil(Math.random() * 100)}`);
-  const { offers, call, answer, localStream, remoteStream } = useCallSimplify({ userName });
+  const [userChoices, setUserChoices] = useState({
+    userName: `Guest-${Math.ceil(Math.random() * 100)}`,
+    isScreenShare: false,
+    withAudio: false,
+  });
+  const { offers, call, answer, localStream, remoteStream } = useCallSimplify({ ...userChoices });
 
   return (
-    <Template userState={[userName, setUserName]} offers={offers} answer={answer}>
-      <MainSection userName={userName} localStream={localStream} remoteStream={remoteStream} call={call} />
+    <Template userState={[userChoices, setUserChoices]} offers={offers} answer={answer}>
+      <MainSection userName={userChoices.userName} localStream={localStream} remoteStream={remoteStream} call={call} />
     </Template>
   );
 };

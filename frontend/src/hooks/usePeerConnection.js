@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 
 let peerConnection;
-const usePeerConnection = (socketConnection, peerConfiguration, userName) => {
+const usePeerConnection = (socketConnection, peerConfiguration, { userName, screenShare, withAudio }) => {
     const [offers, setOffers] = useState([]);
     const [localStream, setLocalStream] = useState(null);
     const [remoteStream, setRemoteStream] = useState(null);
@@ -23,7 +23,8 @@ const usePeerConnection = (socketConnection, peerConfiguration, userName) => {
 
     const fetchUserMedia = async () => {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            console.log({ isScreen: screenShare, withAudio })
+            const stream = await mediaChoice({ isScreen: screenShare, withAudio });
             setLocalStream(stream);
             return stream;
         } catch (err) {
@@ -31,6 +32,21 @@ const usePeerConnection = (socketConnection, peerConfiguration, userName) => {
             return null;
         }
     };
+    const mediaChoice = async ({ isScreen, withAudio = false }) => {
+        if (isScreen) {
+            const displayMediaOptions = {
+                video: { displaySurface: "browser", },
+                audio: {
+                    suppressLocalAudioPlayback: withAudio,
+                }
+            };
+            return (await navigator.mediaDevices.getDisplayMedia(displayMediaOptions));
+        }
+        else {
+            return (await navigator.mediaDevices.getUserMedia({ video: true, audio: withAudio }));
+        }
+
+    }
 
     const createPeerConnection = async (localStream, offerObj) => {
         if (!localStream) return console.error('Local stream is not available.');

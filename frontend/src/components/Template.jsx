@@ -1,7 +1,7 @@
 import React from "react";
 import UserIcon from "./user.png";
 const Template = ({ userState, offers, answer, children }) => {
-  const [userName, setUserName] = userState;
+  const [userChoises, setUserChoises] = userState;
 
   return (
     <div className="flex h-screen">
@@ -36,12 +36,63 @@ const Template = ({ userState, offers, answer, children }) => {
             <input
               className="w-full p-2 rounded-md border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 invalid:ring-red-500"
               placeholder="Choisir un username : By default Guest"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
+              value={userChoises.userName}
+              onChange={(e) =>
+                setUserChoises({
+                  ...userChoises,
+                  userName: e.target.value,
+                })
+              }
               required
             />
           </div>
-          <h2 className="text-xl font-semibold mb-4">User: {userName}</h2>
+          <div className="flex flex-wrap border-gray-200 rounded">
+            <div className="flex items-center ps-4 border">
+              <input
+                onChange={() =>
+                  setUserChoises({
+                    ...userChoises,
+                    withAudio: !userChoises.withAudio,
+                  })
+                }
+                id="bordered-checkbox-1"
+                type="checkbox"
+                value={userChoises.withAudio}
+                name="bordered-checkbox"
+                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <label
+                htmlFor="bordered-checkbox-1"
+                className="w-full py-4 ms-2 text-sm font-medium text-gray-900"
+              >
+                Avec le son
+              </label>
+            </div>
+            <div className="flex items-center ps-4 border">
+              <input
+                id="bordered-checkbox-2"
+                type="checkbox"
+                onChange={() => {
+                  setUserChoises({
+                    ...userChoises,
+                    isScreenShare: !userChoises.isScreenShare,
+                  });
+                }}
+                value={userChoises.isScreenShare}
+                name="bordered-checkbox"
+                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <label
+                htmlFor="bordered-checkbox-2"
+                className="w-full py-4 ms-2 text-sm font-medium text-gray-900"
+              >
+                Screen Share
+              </label>
+            </div>
+          </div>
+          <h2 className="text-xl font-semibold mb-4">
+            User: {userChoises.userName}
+          </h2>
           {children}
         </div>
       </div>
